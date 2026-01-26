@@ -1,11 +1,25 @@
 import pytest
+
 from src.masks import get_mask_account
 from src.masks import get_mask_card_number
+
 
 def test_mask_standard_16_digits() -> None:
     """Тестирование функции get_mask_card_number.
     Тестирование стандартного 16-значного номера карты с "int" на вводе."""
     assert get_mask_card_number(7000792289606361) == '7000 79** **** 6361'
+
+
+def test_mask_fixture(fixture_card_numbers) -> None:
+    """Используем фикстуру для получения данных для тестирования"""
+    assert get_mask_card_number(fixture_card_numbers) == '7000 79** **** 6361'
+
+
+def test_invalid_cards_fixture(fixture_invalid_card_numbers) -> None:
+    """Тестирование невалидных номеров карт через фикстуру"""
+    for test_case in fixture_invalid_card_numbers:
+        with pytest.raises(ValueError, match=test_case["error"]):
+            get_mask_card_number(test_case["number"])
 
 
 def test_mask_with_spaces_input() -> None:
@@ -43,7 +57,6 @@ def test_get_mask_card_number_parametrized(card_number, expected) -> None:
 
 
 @pytest.mark.parametrize('card_number, error_message', [
-    # Некорректные номера
     (None, 'получен None'),
     ('', 'Не корректные входные данные: номер не содержит цифр'),
     ('abc', 'Не корректные входные данные: номер не содержит цифр'),
@@ -59,6 +72,18 @@ def test_get_mask_account() -> None:
     """Тестирование функции get_mask_account.
     Тестирование стандартного 20-значного номера карты с "int" на вводе."""
     assert get_mask_account(73654108430135874305) == '**4305'
+
+
+def test_mask_account_fixture(fixture_account_numbers) -> None:
+    """Используем фикстуру для получения данных для тестирования"""
+    assert get_mask_account(fixture_account_numbers) == '**4305'
+
+
+def test_invalid_accounts_fixture(fixture_invalid_account_numbers) -> None:
+    """Тестирование невалидных номеров счетов через фикстуру"""
+    for test_case in fixture_invalid_account_numbers:
+        with pytest.raises(ValueError, match=test_case["error"]):
+            get_mask_account(test_case["number"])
 
 
 def test_mask_account_normal() -> None:
