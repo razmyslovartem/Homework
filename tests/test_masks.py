@@ -12,29 +12,29 @@ import pytest
 from src.masks import get_mask_account
 from src.masks import get_mask_card_number
 
-def test_mask_standard_16_digits():
+def test_mask_standard_16_digits() -> None:
     """Тестирование функции get_mask_card_number.
     Тестирование стандартного 16-значного номера карты с "int" на вводе."""
     assert get_mask_card_number(7000792289606361) == '7000 79** **** 6361'
 
 
-def test_mask_with_spaces_input():
+def test_mask_with_spaces_input() -> None:
     """Тестирование номера с пробелами."""
     assert get_mask_card_number('7000 7922 8960 6361') == '7000 79** **** 6361'
 
 
-def test_mask_with_dashes_input():
+def test_mask_with_dashes_input() -> None:
     """Тестирование номера с дефисами на входе"""
     assert get_mask_card_number('7000-7922-8960-6361') == '7000 79** **** 6361'
 
 
-def test_mask_empty_string():
+def test_mask_empty_string() -> None:
     """Тестирование пустой строки - должно выбрасывать исключение"""
     with pytest.raises(ValueError, match='Не корректные входные данные: номер не содержит цифр'):
         get_mask_card_number('')
 
 
-def test_mask_not_16_digits():
+def test_mask_not_16_digits() -> None:
     """Тестирование номера не содержащего 16 цифр"""
     with pytest.raises(ValueError, match='Не корректные входные данные: номер должен содержать 16 цифр'):
         get_mask_card_number('123')
@@ -47,7 +47,7 @@ def test_mask_not_16_digits():
     ('1234 5678 9012 3456', '1234 56** **** 3456'),
     ('1234-5678-9012-3456', '1234 56** **** 3456'),
     ])
-def test_get_mask_card_number_parametrized(card_number, expected):
+def test_get_mask_card_number_parametrized(card_number, expected) -> None:
     """Параметризованный тест различных случаев"""
     assert get_mask_card_number(card_number) == expected
 
@@ -59,13 +59,14 @@ def test_get_mask_card_number_parametrized(card_number, expected):
     ('abc', 'Не корректные входные данные: номер не содержит цифр'),
     ('123', 'Не корректные входные данные: номер должен содержать 16 цифр'),
 ])
-def test_get_mask_card_number_errors(card_number, error_message):
+def test_get_mask_card_number_errors(card_number, error_message) -> None:
     """Параметризованный тест некорректных случаев"""
     with pytest.raises(ValueError, match=error_message):
         get_mask_card_number(card_number)
 
 
-def test_get_mask_account():
+def test_get_mask_account() -> None:
     """Тестирование функции get_mask_account."""
     assert get_mask_account(73654108430135874305) == '**4305'
+
 
