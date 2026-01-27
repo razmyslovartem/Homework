@@ -24,5 +24,17 @@
 
 import pytest
 
-from src.masks import get_mask_account
-from src.masks import get_mask_card_number
+from src.widget import mask_account_card
+
+@pytest.mark.parametrize('pay_info, expected', [
+    ('Visa Platinum 7000792289603456', 'Visa Platinum 7000 79** **** 3456'),
+    ('Maestro 7000792289606361', 'Maestro 7000 79** **** 6361'),
+    ('Счет 73654108430135874305', 'Счет **4305'),
+    ('МИР 1234567890123456', 'МИР 1234 56** **** 3456'),
+    ('Maestro 1234567890123456', 'Maestro 1234 56** **** 3456'),
+    ('American Express 5555555555554444', 'American Express 5555 55** **** 4444'),
+    ('Visa Classic 4000123456789010', 'Visa Classic 4000 12** **** 9010'),
+    ])
+def test_mask_account_card(pay_info, expected) -> None:
+    """Параметризованный тест различных случаев"""
+    assert mask_account_card(pay_info) == expected
