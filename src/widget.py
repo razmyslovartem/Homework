@@ -1,5 +1,3 @@
-
-
 from datetime import datetime
 
 from src.masks import get_mask_account
@@ -22,7 +20,7 @@ def mask_account_card(type_account_card: str) -> str:
     name_parts = string_account_card[:-1]
     number_part = string_account_card[-1]
 
-    digits_only = ''.join(filter(str.isdigit, number_part))
+    digits_only = ''.join([char for char in number_part if char.isdigit()])
 
 
     if len(digits_only) == 20:  # Это счет (20 цифр)
@@ -50,12 +48,3 @@ def get_date(date_str: str) -> str:
 
     # Форматируем в нужный формат
     return dt.strftime("%d.%m.%Y")
-
-
-# Примеры входных данных для проверки функции маскировки
-# print(mask_account_card('Visa Platinum 7000792289606361'))
-# print(mask_account_card('Maestro 7000792289606361'))
-# print(mask_account_card('Счет 73654108430135874305'))
-
-# Пример входных данных для проверки функции замены формата даты
-# print(get_date("2024-03-11T02:26:18.671407"))
