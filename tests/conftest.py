@@ -123,6 +123,37 @@ def invalid_get_date_cases() -> List[Dict[str, Any]]:
         {"input": "11-03-2024T02:26:18", "error": "Invalid isoformat string"},
     ]
 
+
+@pytest.fixture
+def test_operations_data():
+    """Фикстура с тестовыми данными операций"""
+    return [
+        {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+        {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
+        {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
+        {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
+        {"id": 123456789, "state": "PENDING", "date": "2023-01-15T10:30:00.000000"},
+    ]
+
+@pytest.fixture
+def empty_operations_data():
+    """Фикстура с пустым списком операций"""
+    return []
+
+@pytest.fixture
+def operations_without_state():
+    """Фикстура с операциями без ключа 'state'"""
+    return [
+        {"id": 1, "date": "2023-01-01T00:00:00.000000"},
+        {"id": 2, "date": "2023-01-02T00:00:00.000000"},
+    ]
+
+
+
+
+
+
+
 # @pytest.fixture
 # def fixture_list_operations() -> list[dict[str, str | int]]:
 #     """Возвращает список банковских операций словарями"""
