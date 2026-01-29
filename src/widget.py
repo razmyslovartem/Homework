@@ -20,8 +20,7 @@ def mask_account_card(type_account_card: str) -> str:
     name_parts = string_account_card[:-1]
     number_part = string_account_card[-1]
 
-    digits_only = ''.join([char for char in number_part if char.isdigit()])
-
+    digits_only = "".join([char for char in number_part if char.isdigit()])
 
     if len(digits_only) == 20:  # Это счет (20 цифр)
         masked_number = get_mask_account(number_part)
@@ -37,7 +36,8 @@ def mask_account_card(type_account_card: str) -> str:
             raise ValueError("Не корректные входные данные: номер должен содержать 16 или 20 цифр")
         else:
             raise ValueError(
-                f"Не корректные входные данные: номер содержит {len(digits_only)} цифр, ожидается 16 или 20")
+                f"Не корректные входные данные: номер содержит {len(digits_only)} цифр, ожидается 16 или 20"
+            )
     return mask_result
 
 

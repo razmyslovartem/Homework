@@ -1,11 +1,3 @@
-# Общие аспекты тестирования
-# Фикстуры. Для всех тестов создайте фикстуры,
-# которые предоставят тестовые данные для списков словарей,
-# включая различные случаи и комбинации state и date.
-#
-# Покрытие тестами.
-# Убедитесь, что все ветви кода и исключения,
-# которые могут быть сгенерированы вашими функциями, тестируются.
 from typing import Any
 from typing import Dict
 from typing import List
@@ -16,7 +8,8 @@ import pytest
 @pytest.fixture()
 def fixture_card_numbers() -> str:
     """Фикстура для предоставления тестового номера карты"""
-    return '7000792289606361'
+    return "7000792289606361"
+
 
 @pytest.fixture
 def fixture_invalid_card_numbers() -> List[Dict[str, Any]]:
@@ -28,10 +21,11 @@ def fixture_invalid_card_numbers() -> List[Dict[str, Any]]:
         {"number": "123", "error": "Не корректные входные данные: номер должен содержать 16 цифр"},
     ]
 
+
 @pytest.fixture()
 def fixture_account_numbers() -> str:
     """Фикстура для предоставления тестового номера счета"""
-    return '73654108430135874305'
+    return "73654108430135874305"
 
 
 @pytest.fixture
@@ -52,30 +46,15 @@ def fixture_invalid_account_numbers() -> List[Dict[str, Any]]:
 def valid_card_data() -> List[Dict[str, Any]]:
     """Фикстура: список словарей с валидными картами и счетами."""
     return [
+        {"input": "Visa Platinum 7000792289603456", "expected": "Visa Platinum 7000 79** **** 3456"},
+        {"input": "Maestro 7000792289606361", "expected": "Maestro 7000 79** **** 6361"},
+        {"input": "МИР 1234567890123456", "expected": "МИР 1234 56** **** 3456"},
+        {"input": "American Express 5555555555554444", "expected": "American Express 5555 55** **** 4444"},
+        {"input": "Visa Classic 4000123456789010", "expected": "Visa Classic 4000 12** **** 9010"},
         {
-            "input": "Visa Platinum 7000792289603456",
-            "expected": "Visa Platinum 7000 79** **** 3456"
+            "input": "Счет 73654108430135874305",
+            "expected": "Счет **4305",
         },
-        {
-            "input": "Maestro 7000792289606361",
-            "expected": "Maestro 7000 79** **** 6361"
-        },
-        {
-            "input": "МИР 1234567890123456",
-            "expected": "МИР 1234 56** **** 3456"
-        },
-        {
-            "input": "American Express 5555555555554444",
-            "expected": "American Express 5555 55** **** 4444"
-        },
-        {
-            "input": "Visa Classic 4000123456789010",
-            "expected": "Visa Classic 4000 12** **** 9010"
-        },
-        {
-            "input": 'Счет 73654108430135874305',
-            "expected": 'Счет **4305',
-        }
     ]
 
 
@@ -135,10 +114,12 @@ def test_operations_data():
         {"id": 123456789, "state": "PENDING", "date": "2023-01-15T10:30:00.000000"},
     ]
 
+
 @pytest.fixture
 def empty_operations_data():
     """Фикстура с пустым списком операций"""
     return []
+
 
 @pytest.fixture
 def operations_without_state():

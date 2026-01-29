@@ -3,6 +3,7 @@ import pytest
 from src.processing import filter_by_state
 from src.processing import sort_by_date
 
+
 def test_filter_by_state_default_executed(test_operations_data) -> None:
     """Тест фильтрации со значением state по умолчанию (EXECUTED)"""
     result = filter_by_state(test_operations_data)
@@ -63,13 +64,16 @@ def test_filter_by_state_operations_without_state(operations_without_state) -> N
     assert len(result) == 0
 
 
-@pytest.mark.parametrize("state, expected_count", [
-    ("EXECUTED", 2),
-    ("CANCELED", 2),
-    ("PENDING", 1),
-    ("FAILED", 0),
-    ("COMPLETED", 0),
-])
+@pytest.mark.parametrize(
+    "state, expected_count",
+    [
+        ("EXECUTED", 2),
+        ("CANCELED", 2),
+        ("PENDING", 1),
+        ("FAILED", 0),
+        ("COMPLETED", 0),
+    ],
+)
 def test_filter_by_state_parametrized(test_operations_data, state, expected_count) -> None:
     """Параметризованный тест для различных значений state"""
     result = filter_by_state(test_operations_data, state)
