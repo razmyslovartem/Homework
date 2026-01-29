@@ -3,6 +3,10 @@ import pytest
 from src.masks import get_mask_account
 from src.masks import get_mask_card_number
 
+# from typing import Any
+# from typing import Dict
+# from typing import List
+
 
 def test_mask_standard_16_digits() -> None:
     """Тестирование функции get_mask_card_number.

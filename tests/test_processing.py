@@ -1,3 +1,5 @@
+from typing import List, Any, Dict
+
 import pytest
 
 from src.processing import filter_by_state
@@ -86,7 +88,7 @@ def test_filter_by_state_parametrized(test_operations_data, state, expected_coun
         assert all(op["state"] == state for op in result)
 
 
-def test_sort_by_date_descending(test_operations_data) -> None:
+def test_sort_by_date_descending(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест сортировки по убыванию даты (новые операции первыми)."""
     result = sort_by_date(test_operations_data, reverse=True)
 
@@ -99,7 +101,7 @@ def test_sort_by_date_descending(test_operations_data) -> None:
     assert result[-1]["id"] in [939719570, 594226727, 615064591]
 
 
-def test_sort_by_date_ascending(test_operations_data):
+def test_sort_by_date_ascending(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест сортировки по возрастанию даты (старые операции первыми)."""
     result = sort_by_date(test_operations_data, reverse=False)
 
@@ -112,7 +114,7 @@ def test_sort_by_date_ascending(test_operations_data):
     assert result[-1]["id"] == 123456789
 
 
-def test_sort_with_missing_dates(operations_with_missing_dates):
+def test_sort_with_missing_dates(operations_with_missing_dates: List[Dict[str, Any]]) -> None:
     """Тест сортировки при отсутствующих датах в некоторых операциях."""
     result = sort_by_date(operations_with_missing_dates, reverse=True)
 
@@ -132,7 +134,7 @@ def test_sort_with_missing_dates(operations_with_missing_dates):
         assert position >= len(result_ids) - len(missing_date_ids)
 
 
-def test_sort_with_invalid_dates(operations_with_invalid_dates):
+def test_sort_with_invalid_dates(operations_with_invalid_dates: List[Dict[str, Any]]) -> None:
     """Тест сортировки с некорректными форматами дат."""
     result = sort_by_date(operations_with_invalid_dates, reverse=True)
 
@@ -151,7 +153,7 @@ def test_sort_with_invalid_dates(operations_with_invalid_dates):
             assert result_dates[i] >= result_dates[i + 1]
 
 
-def test_sort_empty_list(empty_operations_data):
+def test_sort_empty_list(empty_operations_data: List[Dict[str, Any]]) -> None:
     """Тест сортировки пустого списка."""
     result = sort_by_date(empty_operations_data, reverse=True)
 
@@ -159,7 +161,7 @@ def test_sort_empty_list(empty_operations_data):
     assert len(result) == 0
 
 
-def test_sort_single_operation(single_operation):
+def test_sort_single_operation(single_operation: List[Dict[str, Any]]) -> None:
     """Тест сортировки списка с одной операцией."""
     result = sort_by_date(single_operation, reverse=True)
 
@@ -168,7 +170,7 @@ def test_sort_single_operation(single_operation):
     assert result[0]["id"] == 41428829
 
 
-def test_sort_mixed_valid_invalid_dates(operations_with_invalid_dates, test_operations_data):
+def test_sort_mixed_valid_invalid_dates(operations_with_invalid_dates: List[Dict[str, Any]], test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест сортировки списка со смешанными валидными и невалидными датами."""
     # Смешиваем валидные и невалидные данные
     mixed_data = test_operations_data[:2] + operations_with_invalid_dates[:2]
@@ -184,7 +186,7 @@ def test_sort_mixed_valid_invalid_dates(operations_with_invalid_dates, test_oper
     assert result_ids == mixed_ids
 
 
-def test_sort_with_special_date_formats(test_operations_data):
+def test_sort_with_special_date_formats(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест сортировки с разными форматами дат."""
     modified_data = test_operations_data.copy()
 

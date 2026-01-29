@@ -104,7 +104,7 @@ def invalid_get_date_cases() -> List[Dict[str, Any]]:
 
 
 @pytest.fixture
-def test_operations_data():
+def test_operations_data() -> List[Dict[str, Any]]:
     """Фикстура с тестовыми данными операций"""
     return [
         {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -116,7 +116,7 @@ def test_operations_data():
 
 
 @pytest.fixture
-def empty_operations_data():
+def empty_operations_data() -> List[Dict[str, Any]]:
     """Фикстура с пустым списком операций"""
     return []
 
@@ -131,7 +131,7 @@ def operations_without_state():
 
 
 @pytest.fixture
-def operations_with_missing_dates(test_operations_data):
+def operations_with_missing_dates(test_operations_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Фикстура предоставляет операции с отсутствующими датами на основе test_operations_data"""
     modified_data = test_operations_data.copy()
     # Удаляем дату у второй операции
@@ -144,7 +144,10 @@ def operations_with_missing_dates(test_operations_data):
 
 
 @pytest.fixture
-def operations_with_invalid_dates(test_operations_data, invalid_get_date_cases):
+def operations_with_invalid_dates(
+    test_operations_data: List[Dict[str, Any]],
+    invalid_get_date_cases: List[Dict[str, Any]]
+) -> List[Dict[str, Any]]:
     """Фикстура предоставляет операции с некорректными датами на основе test_operations_data"""
     modified_data = test_operations_data.copy()
     # Заменяем даты на невалидные из invalid_get_date_cases
@@ -158,6 +161,6 @@ def operations_with_invalid_dates(test_operations_data, invalid_get_date_cases):
 
 
 @pytest.fixture
-def single_operation(test_operations_data):
+def single_operation(test_operations_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Фикстура предоставляет список с одной операцией на основе test_operations_data"""
     return [test_operations_data[0].copy()]
