@@ -1,3 +1,7 @@
+from typing import Any
+from typing import Dict
+from typing import List
+
 import pytest
 
 from src.widget import get_date
@@ -16,12 +20,12 @@ from src.widget import mask_account_card
         ("Visa Classic 4000123456789010", "Visa Classic 4000 12** **** 9010"),
     ],
 )
-def test_mask_account_card(pay_info, expected) -> None:
+def test_mask_account_card(pay_info: str, expected: str) -> None:
     """Параметризованный тест различных случаев"""
     assert mask_account_card(pay_info) == expected
 
 
-def test_mask_account_card_valid_cards(valid_card_data) -> None:
+def test_mask_account_card_valid_cards(valid_card_data: List[Dict[str, Any]]) -> None:
     """Тест валидных карт и счетов из фикстуры (список словарей)."""
     # Аргумент valid_card_data - это фикстура из conftest.py
     # Она возвращает список словарей с тестовыми данными
@@ -32,14 +36,14 @@ def test_mask_account_card_valid_cards(valid_card_data) -> None:
         assert result == case["expected"]
 
 
-def test_invalid_mask_account_card(invalid_mask_account_card_cases) -> None:
+def test_invalid_mask_account_card(invalid_mask_account_card_cases: List[Dict[str, Any]]) -> None:
     """Тестирование невалидных данных для mask_account_card"""
     for test_case in invalid_mask_account_card_cases:
         with pytest.raises(ValueError, match=test_case["error"]):
             mask_account_card(test_case["input"])
 
 
-def test_wrong_type_mask_account_card(wrong_type_mask_account_card_cases) -> None:
+def test_wrong_type_mask_account_card(wrong_type_mask_account_card_cases: List[Dict[str, Any]]) -> None:
     """Тестирование данных неправильного типа для mask_account_card"""
     for test_case in wrong_type_mask_account_card_cases:
         with pytest.raises(TypeError, match=test_case["error"]):
@@ -56,7 +60,7 @@ def test_wrong_type_mask_account_card(wrong_type_mask_account_card_cases) -> Non
         ("2023-06-15T12:00:00.123", "15.06.2023"),
     ],
 )
-def test_get_date_parametrized(input_str, expected) -> None:
+def test_get_date_parametrized(input_str: str, expected: str) -> None:
     """Параметризованный тест для разных дат-времени"""
     result = get_date(input_str)
     assert result == expected
@@ -71,13 +75,13 @@ def test_get_date_parametrized(input_str, expected) -> None:
         ("", ValueError),  # пустая строка
     ],
 )
-def test_bad_inputs_parametrized_with_type(wrong_input, error_type):
+def test_bad_inputs_parametrized_with_type(wrong_input: str, error_type: type) -> None:
     """Параметризованный тест с указанием типа ошибки"""
     with pytest.raises(error_type):
         get_date(wrong_input)
 
 
-def test_invalid_datetime_simple():
+def test_invalid_datetime_simple() -> None:
     """Упрощенная проверка невалидных дат-времени"""
     invalid_cases = [
         "2024-13-11T02:26:18",  # несуществующий месяц
@@ -92,7 +96,7 @@ def test_invalid_datetime_simple():
             get_date(invalid_str)
 
 
-def test_using_fixture_simple(invalid_get_date_cases):
+def test_using_fixture_simple(invalid_get_date_cases: List[Dict[str, Any]]) -> None:
     """Тест с использованием фикстуры (проверяем только что есть ошибка)"""
     for test_case in invalid_get_date_cases:
         with pytest.raises(ValueError):

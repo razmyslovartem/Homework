@@ -122,7 +122,7 @@ def empty_operations_data() -> List[Dict[str, Any]]:
 
 
 @pytest.fixture
-def operations_without_state():
+def operations_without_state() -> List[Dict[str, Any]]:
     """Фикстура с операциями без ключа 'state'"""
     return [
         {"id": 1, "date": "2023-01-01T00:00:00.000000"},
@@ -145,8 +145,7 @@ def operations_with_missing_dates(test_operations_data: List[Dict[str, Any]]) ->
 
 @pytest.fixture
 def operations_with_invalid_dates(
-    test_operations_data: List[Dict[str, Any]],
-    invalid_get_date_cases: List[Dict[str, Any]]
+    test_operations_data: List[Dict[str, Any]], invalid_get_date_cases: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
     """Фикстура предоставляет операции с некорректными датами на основе test_operations_data"""
     modified_data = test_operations_data.copy()

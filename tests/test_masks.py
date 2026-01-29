@@ -1,11 +1,11 @@
+from typing import Any
+from typing import Dict
+from typing import List
+
 import pytest
 
 from src.masks import get_mask_account
 from src.masks import get_mask_card_number
-
-# from typing import Any
-# from typing import Dict
-# from typing import List
 
 
 def test_mask_standard_16_digits() -> None:
@@ -14,12 +14,12 @@ def test_mask_standard_16_digits() -> None:
     assert get_mask_card_number(7000792289606361) == "7000 79** **** 6361"
 
 
-def test_mask_fixture(fixture_card_numbers) -> None:
+def test_mask_fixture(fixture_card_numbers: str) -> None:
     """Используем фикстуру для получения данных для тестирования"""
     assert get_mask_card_number(fixture_card_numbers) == "7000 79** **** 6361"
 
 
-def test_invalid_cards_fixture(fixture_invalid_card_numbers) -> None:
+def test_invalid_cards_fixture(fixture_invalid_card_numbers: List[Dict[str, Any]]) -> None:
     """Тестирование невалидных номеров карт через фикстуру"""
     for test_case in fixture_invalid_card_numbers:
         with pytest.raises(ValueError, match=test_case["error"]):
@@ -58,7 +58,7 @@ def test_mask_not_16_digits() -> None:
         ("1234-5678-9012-3456", "1234 56** **** 3456"),
     ],
 )
-def test_get_mask_card_number_parametrized(card_number, expected) -> None:
+def test_get_mask_card_number_parametrized(card_number: str, expected: str) -> None:
     """Параметризованный тест различных случаев"""
     assert get_mask_card_number(card_number) == expected
 
@@ -72,7 +72,7 @@ def test_get_mask_card_number_parametrized(card_number, expected) -> None:
         ("123", "Не корректные входные данные: номер должен содержать 16 цифр"),
     ],
 )
-def test_get_mask_card_number_errors(card_number, error_message) -> None:
+def test_get_mask_card_number_errors(card_number: str, error_message: str) -> None:
     """Параметризованный тест некорректных случаев"""
     with pytest.raises(ValueError, match=error_message):
         get_mask_card_number(card_number)
@@ -84,12 +84,12 @@ def test_get_mask_account() -> None:
     assert get_mask_account(73654108430135874305) == "**4305"
 
 
-def test_mask_account_fixture(fixture_account_numbers) -> None:
+def test_mask_account_fixture(fixture_account_numbers: str) -> None:
     """Используем фикстуру для получения данных для тестирования"""
     assert get_mask_account(fixture_account_numbers) == "**4305"
 
 
-def test_invalid_accounts_fixture(fixture_invalid_account_numbers) -> None:
+def test_invalid_accounts_fixture(fixture_invalid_account_numbers: List[Dict[str, Any]]) -> None:
     """Тестирование невалидных номеров счетов через фикстуру"""
     for test_case in fixture_invalid_account_numbers:
         with pytest.raises(ValueError, match=test_case["error"]):

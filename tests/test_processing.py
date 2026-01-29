@@ -1,4 +1,6 @@
-from typing import List, Any, Dict
+from typing import Any
+from typing import Dict
+from typing import List
 
 import pytest
 
@@ -6,7 +8,7 @@ from src.processing import filter_by_state
 from src.processing import sort_by_date
 
 
-def test_filter_by_state_default_executed(test_operations_data) -> None:
+def test_filter_by_state_default_executed(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест фильтрации со значением state по умолчанию (EXECUTED)"""
     result = filter_by_state(test_operations_data)
 
@@ -23,7 +25,7 @@ def test_filter_by_state_default_executed(test_operations_data) -> None:
     assert 594226727 not in result_ids  # CANCELED не должен быть в результате
 
 
-def test_filter_by_state_canceled(test_operations_data) -> None:
+def test_filter_by_state_canceled(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест фильтрации с явным указанием state='CANCELED'"""
     result = filter_by_state(test_operations_data, "CANCELED")
 
@@ -39,7 +41,7 @@ def test_filter_by_state_canceled(test_operations_data) -> None:
     assert 615064591 in result_ids
 
 
-def test_filter_by_state_no_matching_state(test_operations_data) -> None:
+def test_filter_by_state_no_matching_state(test_operations_data: List[Dict[str, Any]]) -> None:
     """Тест фильтрации при отсутствии операций с указанным статусом"""
     result = filter_by_state(test_operations_data, "NONEXISTENT")
 
@@ -48,7 +50,7 @@ def test_filter_by_state_no_matching_state(test_operations_data) -> None:
     assert len(result) == 0
 
 
-def test_filter_by_state_empty_list(empty_operations_data) -> None:
+def test_filter_by_state_empty_list(empty_operations_data: List[Dict[str, Any]]) -> None:
     """Тест фильтрации с пустым списком операций"""
     result = filter_by_state(empty_operations_data, "EXECUTED")
 
@@ -57,7 +59,7 @@ def test_filter_by_state_empty_list(empty_operations_data) -> None:
     assert len(result) == 0
 
 
-def test_filter_by_state_operations_without_state(operations_without_state) -> None:
+def test_filter_by_state_operations_without_state(operations_without_state: List[Dict[str, Any]]) -> None:
     """Тест фильтрации операций без ключа 'state'"""
     result = filter_by_state(operations_without_state, "EXECUTED")
 
@@ -76,7 +78,9 @@ def test_filter_by_state_operations_without_state(operations_without_state) -> N
         ("COMPLETED", 0),
     ],
 )
-def test_filter_by_state_parametrized(test_operations_data, state, expected_count) -> None:
+def test_filter_by_state_parametrized(
+    test_operations_data: List[Dict[str, Any]], state: str, expected_count: int
+) -> None:
     """Параметризованный тест для различных значений state"""
     result = filter_by_state(test_operations_data, state)
 
@@ -170,7 +174,9 @@ def test_sort_single_operation(single_operation: List[Dict[str, Any]]) -> None:
     assert result[0]["id"] == 41428829
 
 
-def test_sort_mixed_valid_invalid_dates(operations_with_invalid_dates: List[Dict[str, Any]], test_operations_data: List[Dict[str, Any]]) -> None:
+def test_sort_mixed_valid_invalid_dates(
+    operations_with_invalid_dates: List[Dict[str, Any]], test_operations_data: List[Dict[str, Any]]
+) -> None:
     """Тест сортировки списка со смешанными валидными и невалидными датами."""
     # Смешиваем валидные и невалидные данные
     mixed_data = test_operations_data[:2] + operations_with_invalid_dates[:2]
