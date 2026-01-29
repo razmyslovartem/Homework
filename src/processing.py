@@ -1,4 +1,3 @@
-
 def filter_by_state(operations: list[dict], state: str = "EXECUTED") -> list[dict]:
     """
     Функция принимает список словарей с банковскими операциями.
