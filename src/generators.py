@@ -54,6 +54,8 @@ def card_number_generator(start_card_number: int, finish_card_number: int, separ
 
         account_length = f"{generated_card_number:016d}"  # Добавление нулей форматированием до 16 разрядов.
 
-        format_card_number = separator.join([account_length[num : num + 4] for num in range(0, len(account_length), 4)])
+        format_card_number = separator.join(
+            [account_length[num:num + 4] for num in range(0, len(account_length), 4)]
+        )
 
         yield format_card_number
