@@ -1,18 +1,18 @@
 """
-Тестовый-модуль tests_decorators.py
-Содержит кейсы для тестирования функций модуля generators.py.
+Тестовый-модуль tests_decorators.py содержит кейсы для тестирования функций модуля generators.py.
 """
 
 from typing import Any
 
-from src.decorators import log_file, my_function
+from src.decorators import log_file
+from src.decorators import my_function
 
 
 def test_log_my_function(capsys: Any) -> Any:
     my_function(1, 2)
     captured = capsys.readouterr()
 
-    if not (captured.out and captured.err):
+    if not captured.out and not captured.err:
 
         #  Данные не выводятся в stdout, они выводятся в file, смотрим в него.
         with open("mylog.txt", "r", encoding="utf-8") as file:

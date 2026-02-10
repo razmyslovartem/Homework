@@ -1,11 +1,11 @@
 """
-В модуле decorators.py
-Этот модуль будет использоваться для размещения декораторов.
+Модуль decorators.py используется для размещения декораторов.
 """
 
 from datetime import datetime
 from functools import wraps
-from typing import Any, Callable
+from typing import Any
+from typing import Callable
 
 log_file = "mylog.txt"
 
@@ -43,7 +43,7 @@ def log(filename: str | None = None) -> Callable:
 
 @log(log_file)
 def my_function(x: int, y: int) -> int:
-    """Простая функция суммирования аргументов"""
+    """Пример использования декоратора. Простая функция суммирования аргументов"""
     return x + y
 
 
