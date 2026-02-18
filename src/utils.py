@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 
 
 def read_json(json_path: str) -> List[Dict[str, Any]]:
+    """Функция, которая принимает на вход путь до JSON-файла и возвращает список транзакций"""
     try:
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
