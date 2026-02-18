@@ -13,7 +13,7 @@ load_dotenv()
 # Получаем API ключ из переменных окружения
 API_KEY: Optional[str] = os.getenv("EXCHANGE_RATES_API_KEY")
 
-API_URL: str = "https://api.apilayer.com/exchangerates_data"
+API_URL: str = "https://api.apilayer.com/exchangerates_data/convert"
 
 
 def get_usd_to_rub_rate() -> Optional[float]:
@@ -33,7 +33,7 @@ def get_usd_to_rub_rate() -> Optional[float]:
         params: Dict[str, Union[str, int]] = {"from": "USD", "to": "RUB", "amount": 1}
 
         # Отправляем запрос к API
-        url: str = f"{API_URL}/convert"
+        url: str = f"{API_URL}"
         print("Отправляем запрос к API...")  # Для отладки
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()  # Проверяем, что запрос успешен
@@ -69,7 +69,7 @@ def get_eur_to_rub_rate() -> Optional[float]:
 
         params: Dict[str, Union[str, int]] = {"from": "EUR", "to": "RUB", "amount": 1}
 
-        url: str = f"{API_URL}/convert"
+        url: str = f"{API_URL}"
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
 
