@@ -1,17 +1,22 @@
 import os
-import requests
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
+
 from dotenv import load_dotenv
+import requests
 
 # Загружаем переменные окружения из .env файла
 load_dotenv()
 
 # Получаем API ключ из переменных окружения
-API_KEY = os.getenv('EXCHANGE_RATES_API_KEY')
+API_KEY: Optional[str] = os.getenv("EXCHANGE_RATES_API_KEY")
 
-API_URL = 'https://api.apilayer.com/exchangerates_data'
+API_URL: str = "https://api.apilayer.com/exchangerates_data"
 
 
-def get_usd_to_rub_rate():
+def get_usd_to_rub_rate() -> Optional[float]:
     """
     Получает текущий курс доллара к рублю
     """
@@ -23,34 +28,28 @@ def get_usd_to_rub_rate():
 
     try:
         # Заголовки для авторизации
-        headers = {
-            'apikey': API_KEY
-        }
+        headers: Dict[str, str] = {"apikey": API_KEY}
 
         # Параметры запроса
-        params = {
-            'from': 'USD',
-            'to': 'RUB',
-            'amount': 1
-        }
+        params: Dict[str, Union[str, int]] = {"from": "USD", "to": "RUB", "amount": 1}
 
         # Отправляем запрос к API
-        url = f"{API_URL}/convert"
-        print(f"Отправляем запрос к API...")  # Для отладки
+        url: str = f"{API_URL}/convert"
+        print("Отправляем запрос к API...")  # Для отладки
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()  # Проверяем, что запрос успешен
 
         # Получаем данные из ответа
-        data = response.json()
+        data: Dict[str, Any] = response.json()
 
         # Проверяем, что запрос выполнен успешно
-        if data.get('success'):
-            rate = float(data['result'])
+        if data.get("success"):
+            rate = float(data["result"])
             print(f"Получен курс USD/RUB: {rate}")  # Для отладки
             return rate
         else:
             print("Ошибка при получении курса доллара")
-            if 'error' in data:
+            if "error" in data:
                 print(f"Детали ошибки: {data['error']}")
             return None
 
@@ -62,7 +61,7 @@ def get_usd_to_rub_rate():
         return None
 
 
-def get_eur_to_rub_rate():
+def get_eur_to_rub_rate() -> Optional[float]:
     """
     Получает текущий курс евро к рублю
     """
@@ -72,24 +71,18 @@ def get_eur_to_rub_rate():
         return None
 
     try:
-        headers = {
-            'apikey': API_KEY
-        }
+        headers: Dict[str, str] = {"apikey": API_KEY}
 
-        params = {
-            'from': 'EUR',
-            'to': 'RUB',
-            'amount': 1
-        }
+        params: Dict[str, Union[str, int]] = {"from": "EUR", "to": "RUB", "amount": 1}
 
-        url = f"{API_URL}/convert"
+        url: str = f"{API_URL}/convert"
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
 
-        data = response.json()
+        data: Dict[str, Any] = response.json()
 
-        if data.get('success'):
-            return float(data['result'])
+        if data.get("success"):
+            return float(data["result"])
         else:
             print("Ошибка при получении курса евро")
             return None
@@ -99,7 +92,7 @@ def get_eur_to_rub_rate():
         return None
 
 
-def convert_transaction(transaction):
+def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
     """
     Принимает транзакцию и возвращает сумму в рублях
 
@@ -110,31 +103,31 @@ def convert_transaction(transaction):
     """
 
     # Проверяем, что в транзакции есть нужные поля
-    if 'amount' not in transaction:
+    if "amount" not in transaction:
         print("Ошибка: в транзакции нет поля 'amount'")
         return None
 
-    if 'currency' not in transaction:
+    if "currency" not in transaction:
         print("Ошибка: в транзакции нет поля 'currency'")
         return None
 
     # Получаем сумму и валюту
-    amount = transaction['amount']
-    currency = transaction['currency'].upper()  # переводим в верхний регистр
+    amount = transaction["amount"]
+    currency = transaction["currency"].upper()  # переводим в верхний регистр
 
     # Пробуем преобразовать сумму в число
     try:
         amount = float(amount)
-    except:
+    except (ValueError, TypeError):
         print(f"Ошибка: не удалось преобразовать '{amount}' в число")
         return None
 
     # Если валюта - рубли, просто возвращаем сумму
-    if currency == 'RUB':
+    if currency == "RUB":
         return amount
 
     # Конвертируем доллары в рубли
-    if currency == 'USD':
+    if currency == "USD":
         rate = get_usd_to_rub_rate()
         if rate is None:
             print("Не удалось получить курс доллара")
@@ -143,7 +136,7 @@ def convert_transaction(transaction):
         return rub_amount
 
     # Конвертируем евро в рубли
-    if currency == 'EUR':
+    if currency == "EUR":
         rate = get_eur_to_rub_rate()
         if rate is None:
             print("Не удалось получить курс евро")
@@ -157,7 +150,7 @@ def convert_transaction(transaction):
 
 
 # Функция для демонстрации работы
-def main():
+def main() -> None:
     """
     Примеры использования функции
     """
@@ -176,19 +169,19 @@ def main():
         print("\nПример запуска с тестовыми данными:")
 
     # Создаем несколько тестовых транзакций
-    transactions = [
-        {'amount': 100, 'currency': 'USD'},
-        {'amount': 150.50, 'currency': 'EUR'},
-        {'amount': 5000, 'currency': 'RUB'},
-        {'amount': '50', 'currency': 'USD'},  # строка тоже работает
-        {'amount': 200, 'currency': 'GBP'}  # неподдерживаемая валюта
+    transactions: list[Dict[str, Any]] = [
+        {"amount": 100, "currency": "USD"},
+        {"amount": 150.50, "currency": "EUR"},
+        {"amount": 5000, "currency": "RUB"},
+        {"amount": "50", "currency": "USD"},  # строка тоже работает
+        {"amount": 200, "currency": "GBP"},  # неподдерживаемая валюта
     ]
 
     # Обрабатываем каждую транзакцию
     for trans in transactions:
         print(f"\nОбрабатываем транзакцию: {trans['amount']} {trans['currency']}")
 
-        result = convert_transaction(trans)
+        result: Optional[float] = convert_transaction(trans)
 
         if result is not None:
             print(f"Сумма в рублях: {result:.2f} RUB")
