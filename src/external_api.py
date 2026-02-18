@@ -48,7 +48,6 @@ def get_usd_to_rub_rate() -> Optional[float]:
             print("Ошибка при получении курса доллара")
             return None
 
-
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при запросе к API: {e}")
         return None
@@ -97,6 +96,7 @@ def get_eur_to_rub_rate() -> Optional[float]:
     except Exception as e:
         print(f"Неожиданная ошибка: {e}")
         return None
+
 
 def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
     """
@@ -162,6 +162,7 @@ def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
     print(f"Валюта {currency} не поддерживается. Поддерживаются: USD, EUR, RUB")
     return None
 
+
 # Функция для демонстрации работы
 def main() -> None:  # pragma: no cover
     """
@@ -183,36 +184,11 @@ def main() -> None:  # pragma: no cover
 
     # Создаем несколько тестовых транзакций
     transactions: list[Dict[str, Any]] = [
-        {
-            "operationAmount": {
-                "amount": 100,
-                "currency": {"code": "USD"}
-            }
-        },
-        {
-            "operationAmount": {
-                "amount": 150.50,
-                "currency": {"code": "EUR"}
-            }
-        },
-        {
-            "operationAmount": {
-                "amount": 5000,
-                "currency": {"code": "RUB"}
-            }
-        },
-        {
-            "operationAmount": {
-                "amount": "50",
-                "currency": {"code": "USD"}
-            }
-        },
-        {
-            "operationAmount": {
-                "amount": 200,
-                "currency": {"code": "GBP"}
-            }
-        },
+        {"operationAmount": {"amount": 100, "currency": {"code": "USD"}}},
+        {"operationAmount": {"amount": 150.50, "currency": {"code": "EUR"}}},
+        {"operationAmount": {"amount": 5000, "currency": {"code": "RUB"}}},
+        {"operationAmount": {"amount": "50", "currency": {"code": "USD"}}},
+        {"operationAmount": {"amount": 200, "currency": {"code": "GBP"}}},
     ]
 
     # Обрабатываем каждую транзакцию
@@ -227,6 +203,7 @@ def main() -> None:  # pragma: no cover
             print(f"Сумма в рублях: {result:.2f} RUB")
         else:
             print("Не удалось обработать транзакцию")
+
 
 if __name__ == "__main__":
     main()
