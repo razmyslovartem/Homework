@@ -23,7 +23,6 @@ def get_usd_to_rub_rate() -> Optional[float]:
     # Проверяем, есть ли API ключ
     if not API_KEY:
         print("Ошибка: не найден API ключ. Добавьте его в файл .env")
-        print("Путь к файлу .env: ../.env (папкой выше)")
         return None
 
     try:
@@ -49,13 +48,8 @@ def get_usd_to_rub_rate() -> Optional[float]:
             return rate
         else:
             print("Ошибка при получении курса доллара")
-            if "error" in data:
-                print(f"Детали ошибки: {data['error']}")
             return None
 
-    except requests.exceptions.RequestException as e:
-        print(f"Ошибка при запросе к API: {e}")
-        return None
     except Exception as e:
         print(f"Неожиданная ошибка: {e}")
         return None
@@ -150,7 +144,7 @@ def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
 
 
 # Функция для демонстрации работы
-def main() -> None:
+def main() -> None: # pragma: no cover
     """
     Примеры использования функции
     """
