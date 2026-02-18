@@ -13,8 +13,6 @@ load_dotenv()
 # Получаем API ключ из переменных окружения
 API_KEY: Optional[str] = os.getenv("EXCHANGE_RATES_API_KEY")
 
-API_URL: str = "https://api.apilayer.com/exchangerates_data/convert"
-
 
 def get_usd_to_rub_rate() -> Optional[float]:
     """
@@ -33,9 +31,9 @@ def get_usd_to_rub_rate() -> Optional[float]:
         params: Dict[str, Union[str, int]] = {"from": "USD", "to": "RUB", "amount": 1}
 
         # Отправляем запрос к API
-        url: str = f"{API_URL}"
+        url = "https://api.apilayer.com/exchangerates_data/convert"
         print("Отправляем запрос к API...")  # Для отладки
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, timeout=10)
         response.raise_for_status()  # Проверяем, что запрос успешен
 
         # Получаем данные из ответа
@@ -49,6 +47,15 @@ def get_usd_to_rub_rate() -> Optional[float]:
         else:
             print("Ошибка при получении курса доллара")
             return None
+
+
+    except requests.exceptions.RequestException as e:
+        print(f"Ошибка при запросе к API: {e}")
+        return None
+
+    except (KeyError, ValueError, TypeError) as e:
+        print(f"Ошибка при обработке ответа от API: {e}")
+        return None
 
     except Exception as e:
         print(f"Неожиданная ошибка: {e}")
@@ -69,8 +76,8 @@ def get_eur_to_rub_rate() -> Optional[float]:
 
         params: Dict[str, Union[str, int]] = {"from": "EUR", "to": "RUB", "amount": 1}
 
-        url: str = f"{API_URL}"
-        response = requests.get(url, headers=headers, params=params)
+        url = "https://api.apilayer.com/exchangerates_data/convert"
+        response = requests.get(url, headers=headers, params=params, timeout=10)
         response.raise_for_status()
 
         data: Dict[str, Any] = response.json()
@@ -84,37 +91,52 @@ def get_eur_to_rub_rate() -> Optional[float]:
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при запросе к API: {e}")
         return None
-
+    except (KeyError, ValueError, TypeError) as e:
+        print(f"Ошибка при обработке ответа от API: {e}")
+        return None
+    except Exception as e:
+        print(f"Неожиданная ошибка: {e}")
+        return None
 
 def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
     """
     Принимает транзакцию и возвращает сумму в рублях
-
     Транзакция - это словарь вида:
-    {'amount': 100, 'currency': 'USD'}
-    {'amount': 150.50, 'currency': 'EUR'}
-    {'amount': 5000, 'currency': 'RUB'}
+    {
+        'operationAmount': {
+            'amount': 100,
+            'currency': {
+                'code': 'USD'
+            }
+        }
+    }
     """
 
     # Проверяем, что в транзакции есть нужные поля
-    if "amount" not in transaction:
-        print("Ошибка: в транзакции нет поля 'amount'")
+    if "operationAmount" not in transaction:
+        print("Ошибка: в транзакции нет поля 'operationAmount'")
         return None
 
-    if "currency" not in transaction:
-        print("Ошибка: в транзакции нет поля 'currency'")
+    try:
+        # Получаем код валюты через прямой доступ к ключам
+        currency_code: str = transaction["operationAmount"]["currency"]["code"]
+        # Получаем сумму через прямой доступ к ключам
+        amount: float = transaction["operationAmount"]["amount"]
+    except KeyError as e:
+        print(f"Ошибка: отсутствует ключ {e} в структуре транзакции")
+        return None
+    except TypeError as e:
+        print(f"Ошибка: неверный формат данных в транзакции - {e}")
         return None
 
-    # Получаем сумму и валюту
-    amount = transaction["amount"]
-    currency = transaction["currency"].upper()  # переводим в верхний регистр
-
-    # Пробуем преобразовать сумму в число
+    # Пробуем преобразовать сумму в число, если она пришла как строка
     try:
         amount = float(amount)
     except (ValueError, TypeError):
         print(f"Ошибка: не удалось преобразовать '{amount}' в число")
         return None
+
+    currency = currency_code.upper()  # переводим в верхний регистр
 
     # Если валюта - рубли, просто возвращаем сумму
     if currency == "RUB":
@@ -126,8 +148,7 @@ def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
         if rate is None:
             print("Не удалось получить курс доллара")
             return None
-        rub_amount = amount * rate
-        return rub_amount
+        return round(amount * rate, 2)
 
     # Конвертируем евро в рубли
     if currency == "EUR":
@@ -135,16 +156,14 @@ def convert_transaction(transaction: Dict[str, Any]) -> Optional[float]:
         if rate is None:
             print("Не удалось получить курс евро")
             return None
-        rub_amount = amount * rate
-        return rub_amount
+        return round(amount * rate, 2)
 
     # Если валюта не поддерживается
     print(f"Валюта {currency} не поддерживается. Поддерживаются: USD, EUR, RUB")
     return None
 
-
 # Функция для демонстрации работы
-def main() -> None: # pragma: no cover
+def main() -> None:  # pragma: no cover
     """
     Примеры использования функции
     """
@@ -164,16 +183,43 @@ def main() -> None: # pragma: no cover
 
     # Создаем несколько тестовых транзакций
     transactions: list[Dict[str, Any]] = [
-        {"amount": 100, "currency": "USD"},
-        {"amount": 150.50, "currency": "EUR"},
-        {"amount": 5000, "currency": "RUB"},
-        {"amount": "50", "currency": "USD"},  # строка тоже работает
-        {"amount": 200, "currency": "GBP"},  # неподдерживаемая валюта
+        {
+            "operationAmount": {
+                "amount": 100,
+                "currency": {"code": "USD"}
+            }
+        },
+        {
+            "operationAmount": {
+                "amount": 150.50,
+                "currency": {"code": "EUR"}
+            }
+        },
+        {
+            "operationAmount": {
+                "amount": 5000,
+                "currency": {"code": "RUB"}
+            }
+        },
+        {
+            "operationAmount": {
+                "amount": "50",
+                "currency": {"code": "USD"}
+            }
+        },
+        {
+            "operationAmount": {
+                "amount": 200,
+                "currency": {"code": "GBP"}
+            }
+        },
     ]
 
     # Обрабатываем каждую транзакцию
     for trans in transactions:
-        print(f"\nОбрабатываем транзакцию: {trans['amount']} {trans['currency']}")
+        amount = trans["operationAmount"]["amount"]
+        currency = trans["operationAmount"]["currency"]["code"]
+        print(f"\nОбрабатываем транзакцию: {amount} {currency}")
 
         result: Optional[float] = convert_transaction(trans)
 
@@ -181,7 +227,6 @@ def main() -> None: # pragma: no cover
             print(f"Сумма в рублях: {result:.2f} RUB")
         else:
             print("Не удалось обработать транзакцию")
-
 
 if __name__ == "__main__":
     main()
