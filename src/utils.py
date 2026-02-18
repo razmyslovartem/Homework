@@ -19,6 +19,6 @@ def read_json(json_path: str) -> List[Dict[str, Any]]:
 
 
 if __name__ == "__main__":
-    json_path = r'C:/Users/Sodrk/Homework/data/operations.json'
+    json_path = '../data/operations.json'
     transactions = read_json(json_path)
     print(f"Найдено транзакций: {len(transactions)}")
