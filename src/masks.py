@@ -17,19 +17,23 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def get_mask_card_number(card_number: str | int) -> str:
+def get_mask_card_number(card_number: str | int | None) -> str:
     """Функция, которая маскирует номер карты."""
     logger.info(f"Накладываем маску на номер карты: {card_number}")
+
+    if card_number is None:
+        logger.error("Не корректные входные данные: получен None")
+        raise ValueError("Не корректные входные данные: получен None")
+
     card_str = str(card_number)
     digits = "".join(char for char in card_str if char.isdigit())
 
-    if card_number is None:
-        raise ValueError("Не корректные входные данные: получен None")
-
     if not digits:
+        logger.error("Не корректные входные данные: номер не содержит цифр")
         raise ValueError("Не корректные входные данные: номер не содержит цифр")
 
     if len(digits) != 16:
+        logger.error("Не корректные входные данные: номер должен содержать 16 цифр")
         raise ValueError("Не корректные входные данные: номер должен содержать 16 цифр")
 
     first_part = digits[:4]
@@ -41,7 +45,7 @@ def get_mask_card_number(card_number: str | int) -> str:
     return masked_number
 
 
-def get_mask_account(account_number: str | int) -> str:
+def get_mask_account(account_number: str | int | None | list | dict) -> str:
     """Функция, которая маскирует номер счета."""
     logger.info(f"Накладываем маску на номер счёта: {account_number}")
     if account_number is None:
