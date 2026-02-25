@@ -2,6 +2,8 @@ from typing import Any
 from typing import Dict
 from typing import List
 
+import pandas as pd
+from pandas import DataFrame
 import pytest
 
 
@@ -163,3 +165,33 @@ def operations_with_invalid_dates(
 def single_operation(test_operations_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Фикстура предоставляет список с одной операцией на основе test_operations_data"""
     return [test_operations_data[0].copy()]
+
+
+@pytest.fixture
+def fixture_transactions() -> DataFrame:
+    transactions_data = [
+        {
+            "id": 650703.0,
+            "state": "EXECUTED",
+            "date": "2023-09-05T11:30:32Z",
+            "amount": 16210.0,
+            "currency_name": "Sol",
+            "currency_code": "PEN",
+            "from": "Счет 58803664561298323391",
+            "to": "Счет 39745660563456619397",
+            "description": "Перевод организации",
+        },
+        {
+            "id": 3598919.0,
+            "state": "EXECUTED",
+            "date": "2020-12-06T23:00:58Z",
+            "amount": 29740.0,
+            "currency_name": "Peso",
+            "currency_code": "COP",
+            "from": "Discover 3172601889670065",
+            "to": "Discover 0720428384694643",
+            "description": "Перевод с карты на карту",
+        },
+    ]
+    df = pd.DataFrame(transactions_data)
+    return df
