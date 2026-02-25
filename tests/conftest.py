@@ -1,10 +1,9 @@
-from pandas import DataFrame
-
 from typing import Any
 from typing import Dict
 from typing import List
 
 import pandas as pd
+from pandas import DataFrame
 import pytest
 
 

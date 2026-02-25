@@ -4,14 +4,14 @@
 """
 
 import os
-import re
 from unittest.mock import Mock
 
-import pandas as pd
 from dotenv import load_dotenv
+import pandas as pd
 from pandas import DataFrame
 
-from src.data_extractor import get_info_csv, get_info_xlsx
+from src.data_extractor import get_info_csv
+from src.data_extractor import get_info_xlsx
 
 
 def test_get_info_csv(fixture_transactions: DataFrame) -> None:
