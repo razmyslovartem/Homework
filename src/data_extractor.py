@@ -17,7 +17,7 @@ def get_info_csv(file_path: str) -> list[dict]:
     """
     df = pd.read_csv(file_path, sep=";", encoding="utf-8")
     data = df.to_dict(orient="records")
-    return data  # type: ignore
+    return data
 
 
 def get_info_xlsx(file_path: str) -> list[dict]:
@@ -27,7 +27,7 @@ def get_info_xlsx(file_path: str) -> list[dict]:
     """
     df = pd.read_excel(file_path)
     data = df.to_dict(orient="records")
-    return data  # type: ignore
+    return data
 
 
 if __name__ == "__main__":  # pragma: no cover
