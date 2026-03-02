@@ -1,7 +1,4 @@
-import os
-
 import pandas as pd
-from dotenv import load_dotenv
 
 from src.data_extractor import get_info_csv, get_info_xlsx
 from src.filtered_transactions import process_bank_search
@@ -179,7 +176,7 @@ def main() -> None:
         print(f"\n{ai_prefix} Фильтрация по тексту не производилась.\n")
 
     # Голова отчёта
-    print("+" + "-" * 60 + "+")
+    print("+" + "-" * 50 + "+")
     print(f"\n{ai_prefix} Распечатываю итоговый список транзакций...\n")
     print(f"Всего банковских операций в выборке: {long_txs}\n")
 
@@ -216,14 +213,18 @@ def main() -> None:
         print(f"{date_str} {text_str.lower()}")
         print(f"{mask_from} -> {mask_to}")
         print(f"Сумма: {int(amount_money)} {currency_code}")
-        print("`" * 62)
+        print("`" * 50)
 
 
-load_dotenv()  # Загрузка переменных из .env-файла.
-file_json_path = os.getenv("FILE_PATH", "default_log_file.json")
-file_csv_path = os.getenv("FILE_PATH_CSV", "default_log_file.csv")
-file_xlsx_path = os.getenv("FILE_PATH_XLSX", "default_log_file.xlsx")
+# load_dotenv()  # Загрузка переменных из .env-файла.
+# file_json_path = os.getenv("FILE_PATH", "default_log_file.json")
+# file_csv_path = os.getenv("FILE_PATH_CSV", "default_log_file.csv")
+# file_xlsx_path = os.getenv("FILE_PATH_XLSX", "default_log_file.xlsx")
+
+file_json_path = 'data/operations.json'
+file_csv_path = 'data/transactions.csv'
+file_xlsx_path = 'data/transactions_excel.xlsx'
 
 main()
 print("Выборка данных закончена.")
-print("+" + "-" * 60 + "+")
+print("+" + "-" * 50 + "+")
