@@ -1,6 +1,6 @@
+from collections import Counter
 import os
 import re
-from collections import Counter
 
 from dotenv import load_dotenv
 
@@ -20,7 +20,7 @@ def process_bank_search(data: list[dict], search_text: str) -> list[dict]:
     return result
 
 
-def process_bank_operations(data: list[dict], categories: list) -> dict:
+def process_bank_operations(data: list[dict], categories: list[str]) -> dict[str, int]:
     """Фильтрация трансакции по категориям с подсчётом операций в категориях"""
     filter_categories = []
 

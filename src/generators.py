@@ -15,7 +15,7 @@ def filter_by_currency(data_array_transactions: list[dict], filter_currency: str
 
         # Проверка, чтобы обрабатывать разные структуры данных.
         if "operationAmount" in transaction_report:
-        # Для JSON структуры
+            # Для JSON структуры
             currency_transaction = transaction_report["operationAmount"]["currency"]["code"]
         else:
             # Для CSV и XLSX структур

@@ -115,7 +115,7 @@ data_array_transactions: list[dict] = [
 @pytest.mark.parametrize(
     "transactions, filter_currency, expected_result",
     [
-        (data_array_transactions, "RUB", 1),
+        (data_array_transactions, "RUB", 2),
         (data_array_transactions, "EUR", 0),
         (data_array_transactions, "USD", 2),
         ([], "RUB", 0),

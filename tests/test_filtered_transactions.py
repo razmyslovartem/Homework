@@ -1,6 +1,7 @@
 from pytest import mark
 
-from src.filtered_transactions import process_bank_operations, process_bank_search
+from src.filtered_transactions import process_bank_operations
+from src.filtered_transactions import process_bank_search
 
 
 # Параметризованный тест.
@@ -32,7 +33,7 @@ def test_process_bank_search(operation: dict) -> None:
 def test_process_bank_operations(fixture_list_operations: list[dict]) -> None:
     """Тест функции process_bank_operations"""
 
-    result_func = process_bank_operations(fixture_list_operations, "Перевод организации")
+    result_func = process_bank_operations(fixture_list_operations, ["Перевод организации"])
 
     assert isinstance(result_func, dict)
     assert "Перевод организации" in result_func
