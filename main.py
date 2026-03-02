@@ -1,17 +1,20 @@
 import pandas as pd
 
-from src.data_extractor import get_info_csv, get_info_xlsx
+from src.data_extractor import get_info_csv
+from src.data_extractor import get_info_xlsx
 from src.filtered_transactions import process_bank_search
 from src.generators import filter_by_currency
-from src.processing import filter_by_state, sort_by_date
+from src.processing import filter_by_state
+from src.processing import sort_by_date
 from src.utils import read_json
-from src.widget import get_date, mask_account_card
+from src.widget import get_date
+from src.widget import mask_account_card
 
 
 def main() -> None:
     ai_prefix = "\033[36mПрограмма:\033[0m"
     user_prefix = "\033[92mПользователь: \033[0m"
-    menu_item = None
+    menu_item = ""
     status = None
     answer_sort = None
     direction = None
@@ -133,7 +136,7 @@ def main() -> None:
     print()
 
     if answer_currency == "1":
-        transactions = filter_by_currency(transactions, "RUB")
+        transactions = list(filter_by_currency(transactions, "RUB"))
         # Переводим тип данных из генератора в лист, иначе данные пропадут
         # когда генератор закончится.
         transactions = list(transactions)
@@ -216,14 +219,9 @@ def main() -> None:
         print("`" * 50)
 
 
-# load_dotenv()  # Загрузка переменных из .env-файла.
-# file_json_path = os.getenv("FILE_PATH", "default_log_file.json")
-# file_csv_path = os.getenv("FILE_PATH_CSV", "default_log_file.csv")
-# file_xlsx_path = os.getenv("FILE_PATH_XLSX", "default_log_file.xlsx")
-
-file_json_path = 'data/operations.json'
-file_csv_path = 'data/transactions.csv'
-file_xlsx_path = 'data/transactions_excel.xlsx'
+file_json_path = "data/operations.json"
+file_csv_path = "data/transactions.csv"
+file_xlsx_path = "data/transactions_excel.xlsx"
 
 main()
 print("Выборка данных закончена.")
