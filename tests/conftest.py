@@ -195,3 +195,15 @@ def fixture_transactions() -> DataFrame:
     ]
     df = pd.DataFrame(transactions_data)
     return df
+
+
+@pytest.fixture
+def fixture_list_operations() -> list[dict[str, str | int]]:
+    """Возвращает список банковских операций с описанием"""
+    return [
+        {"id": 200634844, "description": "Перевод организации"},
+        {"id": 121646999, "description": "Перевод организации"},
+        {"id": 464419177, "description": "Перевод с карты на счет"},
+        {"id": 594226727, "description": "Перевод организации"},
+        {"id": 615064591, "description": "Перевод с карты на счет"},
+    ]

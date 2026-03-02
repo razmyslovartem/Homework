@@ -41,7 +41,7 @@ def log(filename: str | None = None) -> Callable:
     return decorator
 
 
-@log(log_file)
+@log(log_file)  # pragma: no cover
 def my_function(x: int, y: int) -> int:
     """Пример использования декоратора. Простая функция суммирования аргументов"""
     return x + y
